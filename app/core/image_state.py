@@ -35,5 +35,8 @@ class ImageState:
         return self.file_path.name
 
     def reset(self):
-        if self.original_image is not None:
-            self.current_image = self.original_image.copy()
+        if self.original_image is None:
+            return None
+
+        self.current_image = self.original_image.copy()
+        return self.current_image

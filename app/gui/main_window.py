@@ -4,8 +4,11 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QWidget,
     QMessageBox,
-    QLabel
+    QLabel,
+    QDockWidget,
+    QFileDialog
 )
+from app.controllers.image_controller import ImageController
 from app.gui.components.image_view import ImageView
 from app.gui.components.properties_panel import PropertiesPanel
 from app.gui.components.sidebar import Sidebar
@@ -15,18 +18,57 @@ from app.gui.styles import *
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.image_controller = ImageController()
 
         self._configure_window()
 
         self._create_menu()
         self._create_toolbar()
+        self._connect_actions()
         self._create_statusbar()
         self._create_ui()
+
     def _configure_window(self):
 
         self.setWindowTitle(WINDOW_TITLE)
         self.resize(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.setMinimumSize(MIN_WIDTH, MIN_HEIGHT)
+
+    def _connect_actions(self):
+
+        self.toolbar.open_action.triggered.connect(
+            self.open_image
+        )
+
+        self.open_action.triggered.connect(
+            self.open_image
+        )
+
+    def open_image(self):
+
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Open Image",
+            "",
+            "Images (*.png *.jpg *.jpeg *.bmp *.tif)"
+        )
+
+        if not path:
+            return
+
+        self.image_controller.load_image(path)
+
+        self.image_view.set_image(
+            self.image_controller.state.current_image
+        )
+
+        self.status_label.setText(
+            f"Loaded {self.image_controller.state.file_name}"
+        )
+
+        self.image_info_label.setText(
+            f"{self.image_controller.state.width} × {self.image_controller.state.height}"
+        )
 
     def _create_menu(self):
 
@@ -83,10 +125,29 @@ class MainWindow(QMainWindow):
         self.properties = PropertiesPanel()
         self.properties.setFixedWidth(280)
 
-        layout.addWidget(self.sidebar)
-        layout.addWidget(self.image_view, 1)
-        layout.addWidget(self.properties)
+        self.setCentralWidget(self.image_view)
+        self.sidebar_dock = QDockWidget("Filters", self)
 
+        self.sidebar_dock.setWidget(self.sidebar)
+
+        self.addDockWidget(
+            Qt.LeftDockWidgetArea,
+            self.sidebar_dock
+        )
+
+        self.properties_dock = QDockWidget(
+            "Properties",
+            self
+        )
+
+        self.properties_dock.setWidget(
+            self.properties
+        )
+
+        self.addDockWidget(
+            Qt.RightDockWidgetArea,
+            self.properties_dock
+        )
         self.sidebar.setFixedWidth(SIDEBAR_WIDTH)
 
     def show_about(self):
