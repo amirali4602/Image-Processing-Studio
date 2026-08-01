@@ -18,15 +18,15 @@ from app.gui.styles import *
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.image_controller = ImageController()
 
         self._configure_window()
 
+        self.image_controller = ImageController()
+        self._create_ui()
         self._create_menu()
         self._create_toolbar()
         self._connect_actions()
         self._create_statusbar()
-        self._create_ui()
 
     def _configure_window(self):
 
@@ -36,38 +36,32 @@ class MainWindow(QMainWindow):
 
     def _connect_actions(self):
 
-        self.toolbar.open_action.triggered.connect(
-            self.open_image
-        )
-
         self.open_action.triggered.connect(
             self.open_image
         )
 
-    def open_image(self):
-
-        path, _ = QFileDialog.getOpenFileName(
-            self,
-            "Open Image",
-            "",
-            "Images (*.png *.jpg *.jpeg *.bmp *.tif)"
+        self.save_action.triggered.connect(
+            self.save_image
         )
 
-        if not path:
-            return
-
-        self.image_controller.load_image(path)
-
-        self.image_view.set_image(
-            self.image_controller.state.current_image
+        self.toolbar.open_action.triggered.connect(
+            self.open_image
         )
 
-        self.status_label.setText(
-            f"Loaded {self.image_controller.state.file_name}"
+        self.toolbar.save_action.triggered.connect(
+            self.save_image
         )
 
-        self.image_info_label.setText(
-            f"{self.image_controller.state.width} × {self.image_controller.state.height}"
+        self.toolbar.fit_action.triggered.connect(
+            self.image_view.fit_image
+        )
+
+        self.save_as_action.triggered.connect(
+            self.save_image_as
+        )
+
+        self.toolbar.reset_action.triggered.connect(
+            self.reset_image
         )
 
     def _create_menu(self):
@@ -76,13 +70,17 @@ class MainWindow(QMainWindow):
 
         self.open_action = file_menu.addAction("Open")
         self.save_action = file_menu.addAction("Save")
+        self.save_as_action = file_menu.addAction("Save As")
 
         file_menu.addSeparator()
 
-        self.exit_action = file_menu.addAction("Exit")
-        self.exit_action.triggered.connect(self.close)
+        self.exit_action = file_menu.addAction(
+            "Exit",
+            self.close
+        )
         self.open_action.setShortcut("Ctrl+O")
         self.save_action.setShortcut("Ctrl+S")
+        self.save_as_action.setShortcut("Ctrl+Shift+S")
         self.exit_action.setShortcut("Ctrl+Q")
         self.menuBar().addMenu("&View")
         help_menu = self.menuBar().addMenu("&Help")
@@ -168,4 +166,81 @@ class MainWindow(QMainWindow):
             <li>NumPy</li>
             </ul>
             """
+        )
+
+    def save_image(self):
+
+        try:
+
+            self.image_controller.save_image()
+
+            self.status_label.setText(
+                "Image saved"
+            )
+
+        except ValueError as e:
+
+            self.status_label.setText(
+                str(e)
+            )
+
+    def save_image_as(self):
+
+        path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Save Image",
+            "",
+            "PNG (*.png);;JPEG (*.jpg)"
+        )
+
+
+        if not path:
+            return
+
+
+        self.image_controller.save_image_as(path)
+
+        self.status_label.setText(
+            "Image saved"
+        )
+
+    def open_image(self):
+
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Open Image",
+            "",
+            "Images (*.png *.jpg *.jpeg *.bmp)"
+        )
+
+        if not path:
+            return
+
+
+        image = self.image_controller.load_image(path)
+
+
+        self.image_view.set_image(image)
+
+
+        self.status_label.setText(
+            f"Loaded {self.image_controller.state.file_name}"
+        )
+
+
+        self.image_info_label.setText(
+            f"{self.image_controller.state.width} x {self.image_controller.state.height}"
+        )
+
+    def reset_image(self):
+
+        image = self.image_controller.reset_image()
+
+        if image is None:
+            return
+
+        self.image_view.set_image(image)
+
+        self.status_label.setText(
+            "Image reset"
         )
