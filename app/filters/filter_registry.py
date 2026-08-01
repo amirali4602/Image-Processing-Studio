@@ -6,6 +6,7 @@ from app.filters.low_pass.box_filter import BoxFilter
 from app.filters.low_pass.gaussian_filter import GaussianFilter
 from app.filters.high_pass.sobel_filter import SobelFilter
 from app.filters.high_pass.log_filter import LoGFilter
+from app.filters.intensity.gamma_transform import GammaTransform
 
 def register_filters(
     manager: FilterManager
@@ -34,3 +35,8 @@ def register_filters(
     manager.register(
         LogTransform()
     )
+    
+    manager.register(
+        GammaTransform()
+    )
+        

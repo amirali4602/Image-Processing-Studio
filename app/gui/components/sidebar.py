@@ -50,7 +50,8 @@ class Sidebar(QWidget):
                 "Sobel Filter",
                 "Laplacian Filter",
                 "LoG Filter",
-                "Log Transformation"
+                "Log Transformation",
+                "Power Law (Gamma)"
             ]
         )
 
