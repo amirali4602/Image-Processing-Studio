@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+from app.filters.filter_parameters import FilterParameter
 import numpy as np
 
 
@@ -10,7 +10,10 @@ class BaseFilter(ABC):
 
     name: str = "Base Filter"
 
+    def parameters(self):
 
+        return []
+    
     @abstractmethod
     def apply(
         self,

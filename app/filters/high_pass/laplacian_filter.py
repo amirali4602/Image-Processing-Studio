@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 
 from app.filters.base_filter import BaseFilter
+from app.filters.filter_parameters import FilterParameter
 
 
 class LaplacianFilter(BaseFilter):
@@ -54,3 +55,18 @@ class LaplacianFilter(BaseFilter):
             laplacian,
             cv2.COLOR_GRAY2BGR
         )
+
+    def parameters(self):
+
+        return [
+
+            FilterParameter(
+                name="kernel_size",
+                value=self.kernel_size,
+                parameter_type="int",
+                minimum=1,
+                maximum=31,
+                step=2
+            )
+
+        ]

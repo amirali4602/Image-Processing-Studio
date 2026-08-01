@@ -38,3 +38,12 @@ class FilterManager:
         return list(
             self.filters.keys()
         )
+
+    def get_parameters(
+        self,
+        name
+    ):
+
+        filter = self.get_filter(name)
+
+        return filter.parameters()

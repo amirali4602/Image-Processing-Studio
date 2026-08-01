@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 
 from app.filters.base_filter import BaseFilter
+from app.filters.filter_parameters import FilterParameter
 
 
 class LoGFilter(BaseFilter):
@@ -70,3 +71,38 @@ class LoGFilter(BaseFilter):
             log,
             cv2.COLOR_GRAY2BGR
         )
+
+    def parameters(self):
+
+        return [
+
+            FilterParameter(
+                name="gaussian_kernel_size",
+                value=self.gaussian_kernel_size,
+                parameter_type="int",
+                minimum=3,
+                maximum=31,
+                step=2
+            ),
+
+
+            FilterParameter(
+                name="sigma",
+                value=self.sigma,
+                parameter_type="float",
+                minimum=0.1,
+                maximum=10,
+                step=0.1
+            ),
+
+
+            FilterParameter(
+                name="laplacian_kernel_size",
+                value=self.laplacian_kernel_size,
+                parameter_type="int",
+                minimum=1,
+                maximum=31,
+                step=2
+            )
+
+        ]

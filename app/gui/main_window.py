@@ -73,6 +73,10 @@ class MainWindow(QMainWindow):
             self.reset_image
         )
 
+        self.sidebar.filter_changed.connect(
+            self.load_filter_parameters
+        )
+
     def _create_menu(self):
 
         file_menu = self.menuBar().addMenu("&File")
@@ -294,3 +298,19 @@ class MainWindow(QMainWindow):
         except Exception as e:
 
             print(e)
+
+    def load_filter_parameters(
+        self,
+        name
+    ):
+
+        parameters = (
+            self.image_controller
+            .filter_manager
+            .get_parameters(name)
+        )
+
+
+        self.sidebar.parameter_widget.load_parameters(
+            parameters
+        )

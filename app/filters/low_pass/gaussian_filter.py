@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 
 from app.filters.base_filter import BaseFilter
+from app.filters.filter_parameters import FilterParameter
 
 
 class GaussianFilter(BaseFilter):
@@ -34,3 +35,28 @@ class GaussianFilter(BaseFilter):
             ),
             self.sigma
         )
+
+    def parameters(self):
+
+        return [
+
+            FilterParameter(
+                name="kernel_size",
+                value=self.kernel_size,
+                parameter_type="int",
+                minimum=3,
+                maximum=31,
+                step=2
+            ),
+
+
+            FilterParameter(
+                name="sigma",
+                value=self.sigma,
+                parameter_type="float",
+                minimum=0.1,
+                maximum=10,
+                step=0.1
+            )
+
+        ]

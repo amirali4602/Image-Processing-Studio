@@ -5,15 +5,17 @@ from PySide6.QtWidgets import (
     QLabel,
     QListWidget,
     QPushButton,
-    QSpinBox,
-    QDoubleSpinBox,
+)
+
+from app.gui.components.filter_parameter_widget import (
+    FilterParameterWidget
 )
 
 
 class Sidebar(QWidget):
 
-    filter_selected = Signal(str)
     apply_requested = Signal(str, dict)
+    filter_changed = Signal(str)
 
 
     def __init__(self):
@@ -21,6 +23,8 @@ class Sidebar(QWidget):
         super().__init__()
 
         self.selected_filter = None
+
+        self.parameter_widget = FilterParameterWidget()
 
         self._create_ui()
 
@@ -60,59 +64,8 @@ class Sidebar(QWidget):
         )
 
 
-        self.kernel_label = QLabel(
-            "Kernel Size"
-        )
-
         layout.addWidget(
-            self.kernel_label
-        )
-
-
-        self.kernel_size = QSpinBox()
-
-        self.kernel_size.setRange(
-            3,
-            31
-        )
-
-        self.kernel_size.setSingleStep(
-            2
-        )
-
-        self.kernel_size.setValue(
-            5
-        )
-
-
-        layout.addWidget(
-            self.kernel_size
-        )
-
-
-        self.sigma_label = QLabel(
-            "Sigma"
-        )
-
-        layout.addWidget(
-            self.sigma_label
-        )
-
-
-        self.sigma = QDoubleSpinBox()
-
-        self.sigma.setRange(
-            0.1,
-            10
-        )
-
-        self.sigma.setValue(
-            1.0
-        )
-
-
-        layout.addWidget(
-            self.sigma
+            self.parameter_widget
         )
 
 
@@ -131,11 +84,14 @@ class Sidebar(QWidget):
         )
 
 
-    def _filter_changed(self, name):
+    def _filter_changed(
+        self,
+        name
+    ):
 
         self.selected_filter = name
 
-        self.filter_selected.emit(
+        self.filter_changed.emit(
             name
         )
 
@@ -146,13 +102,10 @@ class Sidebar(QWidget):
             return
 
 
-        params = {
-            "kernel_size":
-                self.kernel_size.value(),
-
-            "sigma":
-                self.sigma.value()
-        }
+        params = (
+            self.parameter_widget
+            .values()
+        )
 
 
         self.apply_requested.emit(

@@ -58,7 +58,9 @@ class ImageController:
 
     def reset_image(self):
 
-        return self.state.reset()
+        self.state.reset()
+
+        return self.state.current_image
 
     def apply_filter(
         self,

@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+from app.filters.filter_parameters import FilterParameter
 from app.filters.base_filter import BaseFilter
 
 
@@ -25,3 +25,16 @@ class BoxFilter(BaseFilter):
                 self.kernel_size
             )
         )
+
+    def parameters(self):
+
+        return [
+            FilterParameter(
+                name="kernel_size",
+                value=self.kernel_size,
+                parameter_type="int",
+                minimum=3,
+                maximum=31,
+                step=2
+            )
+        ]
