@@ -49,7 +49,8 @@ class Sidebar(QWidget):
                 "Gaussian Filter",
                 "Sobel Filter",
                 "Laplacian Filter",
-                "LoG Filter"
+                "LoG Filter",
+                "Log Transformation"
             ]
         )
 
