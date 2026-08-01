@@ -38,6 +38,9 @@ class MainWindow(QMainWindow):
 
     def _connect_actions(self):
 
+        self.sidebar.apply_requested.connect(
+            self.apply_filter
+        )
         self.image_view.image_dropped.connect(
             self.open_image_from_path
         )
@@ -112,15 +115,6 @@ class MainWindow(QMainWindow):
         self.statusBar().addPermanentWidget(self.image_info_label)
 
     def _create_ui(self):
-
-        central = QWidget()
-
-        self.setCentralWidget(central)
-
-        layout = QHBoxLayout(central)
-        layout.setContentsMargins(10, 10, 10, 10)
-
-        layout.setSpacing(10)
         self.sidebar = Sidebar()
         self.sidebar.setFixedWidth(250)
 
@@ -256,6 +250,7 @@ class MainWindow(QMainWindow):
         self.status_label.setText(
             f"Loaded {self.image_controller.state.file_name}"
         )
+        self.update_image_info()
 
     def update_image_info(self):
 
@@ -268,3 +263,34 @@ class MainWindow(QMainWindow):
         self.image_info_label.setText(
             f"{state.width} x {state.height}"
         )
+
+    def apply_filter(
+        self,
+        name,
+        params
+    ):
+
+        try:
+
+            image = (
+                self.image_controller
+                .apply_filter(
+                    name,
+                    params
+                )
+            )
+
+
+            self.image_view.set_image(
+                image
+            )
+
+
+            self.statusBar().showMessage(
+                f"Applied {name}"
+            )
+
+
+        except Exception as e:
+
+            print(e)

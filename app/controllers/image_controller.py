@@ -62,13 +62,27 @@ class ImageController:
 
     def apply_filter(
         self,
-        filter_name: str
+        filter_name: str,
+        params: dict
     ):
 
         image_filter = (
             self.filter_manager
             .get_filter(filter_name)
         )
+
+
+        for key, value in params.items():
+
+            if hasattr(
+                image_filter,
+                key
+            ):
+                setattr(
+                    image_filter,
+                    key,
+                    value
+                )
 
 
         result = image_filter.apply(
