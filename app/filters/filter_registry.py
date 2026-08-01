@@ -1,5 +1,6 @@
 from app.filters.filter_manager import FilterManager
 
+from app.filters.high_pass.laplacian_filter import LaplacianFilter
 from app.filters.low_pass.box_filter import BoxFilter
 from app.filters.low_pass.gaussian_filter import GaussianFilter
 from app.filters.high_pass.sobel_filter import SobelFilter
@@ -19,4 +20,8 @@ def register_filters(
 
     manager.register(
         SobelFilter()
+    )
+
+    manager.register(
+        LaplacianFilter()
     )
