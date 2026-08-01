@@ -1,0 +1,10 @@
+WINDOW_TITLE = "Image Processing Studio"
+APP_ICON = "app/resources/icons/app.png"
+
+WINDOW_WIDTH = 1400
+WINDOW_HEIGHT = 900
+
+MIN_WIDTH = 1200
+MIN_HEIGHT = 800
+
+SIDEBAR_WIDTH = 260
