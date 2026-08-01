@@ -14,7 +14,9 @@ from app.gui.components.properties_panel import PropertiesPanel
 from app.gui.components.sidebar import Sidebar
 from app.gui.components.toolbar import MainToolbar
 from PySide6.QtGui import QIcon
+from app.gui.dialogs.message_dialogs import MessageDialogs
 from app.gui.styles import *
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -36,6 +38,10 @@ class MainWindow(QMainWindow):
 
     def _connect_actions(self):
 
+        self.image_view.image_dropped.connect(
+            self.open_image_from_path
+        )
+        
         self.open_action.triggered.connect(
             self.open_image
         )
@@ -119,6 +125,7 @@ class MainWindow(QMainWindow):
         self.sidebar.setFixedWidth(250)
 
         self.image_view = ImageView()
+        
 
         self.properties = PropertiesPanel()
         self.properties.setFixedWidth(280)
@@ -180,29 +187,37 @@ class MainWindow(QMainWindow):
 
         except ValueError as e:
 
-            self.status_label.setText(
+            MessageDialogs.show_error(
+                self,
                 str(e)
             )
 
     def save_image_as(self):
 
-        path, _ = QFileDialog.getSaveFileName(
-            self,
-            "Save Image",
-            "",
-            "PNG (*.png);;JPEG (*.jpg)"
-        )
+        try:
+            path, _ = QFileDialog.getSaveFileName(
+                self,
+                "Save Image",
+                "",
+                "PNG (*.png);;JPEG (*.jpg)"
+            )
 
 
-        if not path:
-            return
+            if not path:
+                return
 
+            self.image_controller.save_image_as(path)
 
-        self.image_controller.save_image_as(path)
+            self.status_label.setText(
+                "Image saved"
+            )
 
-        self.status_label.setText(
-            "Image saved"
-        )
+        except ValueError as e:
+
+            MessageDialogs.show_error(
+                self,
+                str(e)
+            )
 
     def open_image(self):
 
@@ -216,21 +231,8 @@ class MainWindow(QMainWindow):
         if not path:
             return
 
-
-        image = self.image_controller.load_image(path)
-
-
-        self.image_view.set_image(image)
-
-
-        self.status_label.setText(
-            f"Loaded {self.image_controller.state.file_name}"
-        )
-
-
-        self.image_info_label.setText(
-            f"{self.image_controller.state.width} x {self.image_controller.state.height}"
-        )
+        self.open_image_from_path(path)
+        self.update_image_info()
 
     def reset_image(self):
 
@@ -243,4 +245,26 @@ class MainWindow(QMainWindow):
 
         self.status_label.setText(
             "Image reset"
+        )
+
+    def open_image_from_path(self, path):
+
+        image = self.image_controller.load_image(path)
+
+        self.image_view.set_image(image)
+
+        self.status_label.setText(
+            f"Loaded {self.image_controller.state.file_name}"
+        )
+
+    def update_image_info(self):
+
+        state = self.image_controller.state
+
+        self.status_label.setText(
+            f"Loaded: {state.file_name}"
+        )
+
+        self.image_info_label.setText(
+            f"{state.width} x {state.height}"
         )

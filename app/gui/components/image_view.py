@@ -6,11 +6,13 @@ from PySide6.QtWidgets import (
     QGraphicsTextItem,
     QGraphicsView,
 )
-
+from PySide6.QtCore import Signal
 from app.utils.image_converter import ImageConverter
 
 
 class ImageView(QGraphicsView):
+
+    image_dropped = Signal(str)
 
     def __init__(self):
         super().__init__()
@@ -21,6 +23,7 @@ class ImageView(QGraphicsView):
         self._empty = True
         
 
+        self.setAcceptDrops(True)
         self.scene = QGraphicsScene(self)
         self.setScene(self.scene)
 
@@ -108,3 +111,20 @@ class ImageView(QGraphicsView):
         self.fit_image()
 
         super().mouseDoubleClickEvent(event)
+
+    def dragEnterEvent(self, event):
+
+        if event.mimeData().hasUrls():
+
+            event.acceptProposedAction()
+
+    def dropEvent(self, event):
+
+        urls = event.mimeData().urls()
+
+        if not urls:
+            return
+
+        path = urls[0].toLocalFile()
+
+        self.image_dropped.emit(path)
