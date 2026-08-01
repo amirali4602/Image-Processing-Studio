@@ -1,10 +1,13 @@
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QColor, QFont
+from PySide6.QtGui import QColor, QPainter
 from PySide6.QtWidgets import (
+    QGraphicsPixmapItem,
     QGraphicsScene,
     QGraphicsTextItem,
     QGraphicsView,
 )
+
+from app.utils.image_converter import ImageConverter
 
 
 class ImageView(QGraphicsView):
@@ -15,26 +18,48 @@ class ImageView(QGraphicsView):
         self.scene = QGraphicsScene(self)
         self.setScene(self.scene)
 
-        self.setAlignment(Qt.AlignCenter)
+        self.pixmap_item = QGraphicsPixmapItem()
 
-        self.setRenderHints(
-            self.renderHints()
+        self.scene.addItem(self.pixmap_item)
+
+        self.placeholder = QGraphicsTextItem(
+            "Open an image to begin"
         )
 
-        self.setDragMode(QGraphicsView.NoDrag)
+        self.scene.addItem(self.placeholder)
+
+        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.setBackgroundBrush(QColor("#202124"))
 
-        self.setFrameShape(QGraphicsView.NoFrame)
+        self.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
 
-        text = QGraphicsTextItem("Open an image to begin")
+    def set_image(self, image):
 
-        font = QFont()
-        font.setPointSize(16)
+        self.placeholder.hide()
 
-        text.setFont(font)
-        text.setDefaultTextColor(QColor("#9AA0A6"))
+        pixmap = ImageConverter.cv_to_pixmap(image)
 
-        self.scene.addItem(text)
+        self.pixmap_item.setPixmap(pixmap)
 
-        text.setPos(-70, -10)
+        self.scene.setSceneRect(
+            self.pixmap_item.boundingRect()
+        )
+
+        self.fit_image()
+
+    def clear_image(self):
+
+        self.pixmap_item.setPixmap({})
+
+        self.placeholder.show()
+
+    def fit_image(self):
+
+        if self.pixmap_item.pixmap().isNull():
+            return
+
+        self.fitInView(
+            self.pixmap_item,
+            Qt.AspectRatioMode.KeepAspectRatio,
+        )
