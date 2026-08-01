@@ -94,6 +94,58 @@ class PropertiesPanel(QWidget):
 
         layout.addStretch()
 
+        # Statistics Section
+
+        statistics_group = QGroupBox(
+            "Image Statistics"
+        )
+
+
+        statistics_form = QFormLayout()
+
+
+        self.minimum_label = QLabel("-")
+
+        self.maximum_label = QLabel("-")
+
+        self.mean_label = QLabel("-")
+
+        self.std_label = QLabel("-")
+
+
+        statistics_form.addRow(
+            "Minimum:",
+            self.minimum_label
+        )
+
+
+        statistics_form.addRow(
+            "Maximum:",
+            self.maximum_label
+        )
+
+
+        statistics_form.addRow(
+            "Mean:",
+            self.mean_label
+        )
+
+
+        statistics_form.addRow(
+            "Standard Deviation:",
+            self.std_label
+        )
+
+
+        statistics_group.setLayout(
+            statistics_form
+        )
+
+
+        layout.addWidget(
+            statistics_group
+        )
+
 
     def update_image_info(
         self,
@@ -155,3 +207,42 @@ class PropertiesPanel(QWidget):
             self.color_label.setText(
                 "-"
             )
+
+
+    def update_statistics(
+        self,
+        image
+    ):
+
+        if image is None:
+            return
+
+
+        from app.core.image_statistics import (
+            ImageStatistics
+        )
+
+
+        statistics = ImageStatistics(
+            image
+        )
+
+
+        self.minimum_label.setText(
+            str(statistics.minimum)
+        )
+
+
+        self.maximum_label.setText(
+            str(statistics.maximum)
+        )
+
+
+        self.mean_label.setText(
+            str(statistics.mean)
+        )
+
+
+        self.std_label.setText(
+            str(statistics.standard_deviation)
+        )

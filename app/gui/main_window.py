@@ -260,7 +260,9 @@ class MainWindow(QMainWindow):
         self.properties.update_image_info(
             self.image_controller.state
         )
-
+        self.properties.update_statistics(
+            image
+        )
 
         self.status_label.setText(
             f"Loaded {self.image_controller.state.file_name}"
@@ -298,7 +300,9 @@ class MainWindow(QMainWindow):
             self.image_view.set_image(
                 image
             )
-
+            self.properties.update_statistics(
+                image
+            )
 
             self.statusBar().showMessage(
                 f"Applied {name}"
