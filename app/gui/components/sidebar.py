@@ -52,7 +52,8 @@ class Sidebar(QWidget):
                 "LoG Filter",
                 "Log Transformation",
                 "Power Law (Gamma)",
-                "Piecewise Linear Transformation"
+                "Piecewise Linear Transformation",
+                "Histogram Equalization"
             ]
         )
 

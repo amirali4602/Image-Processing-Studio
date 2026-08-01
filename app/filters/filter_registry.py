@@ -8,7 +8,7 @@ from app.filters.low_pass.gaussian_filter import GaussianFilter
 from app.filters.high_pass.sobel_filter import SobelFilter
 from app.filters.high_pass.log_filter import LoGFilter
 from app.filters.intensity.gamma_transform import GammaTransform
-
+from app.filters.histogram.histogram_equalization import HistogramEqualization
 def register_filters(
     manager: FilterManager
 ):
@@ -43,4 +43,8 @@ def register_filters(
 
     manager.register(
         PiecewiseLinearTransform()
+    )
+
+    manager.register(
+        HistogramEqualization()
     )
