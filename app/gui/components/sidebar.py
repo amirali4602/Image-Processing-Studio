@@ -44,7 +44,8 @@ class Sidebar(QWidget):
                 "Box Filter",
                 "Gaussian Filter",
                 "Sobel Filter",
-                "Laplacian Filter"
+                "Laplacian Filter",
+                "LoG Filter"
             ]
         )
 
