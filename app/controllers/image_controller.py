@@ -2,12 +2,13 @@ from pathlib import Path
 
 from app.core.file_manager import FileManager
 from app.core.image_state import ImageState
-
+from app.filters.filter_manager import FilterManager
 
 class ImageController:
 
     def __init__(self):
         self.state = ImageState()
+        self.filter_manager = FilterManager()
 
     def load_image(self, path: str | Path):
 
@@ -54,3 +55,24 @@ class ImageController:
     def reset_image(self):
 
         return self.state.reset()
+
+    def apply_filter(
+        self,
+        filter_name: str
+    ):
+
+        image_filter = (
+            self.filter_manager
+            .get_filter(filter_name)
+        )
+
+
+        result = image_filter.apply(
+            self.state.current_image
+        )
+
+
+        self.state.current_image = result
+
+
+        return result
