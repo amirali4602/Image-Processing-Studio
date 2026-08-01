@@ -42,7 +42,8 @@ class Sidebar(QWidget):
         self.filter_list.addItems(
             [
                 "Box Filter",
-                "Gaussian Filter"
+                "Gaussian Filter",
+                "Sobel Filter"
             ]
         )
 

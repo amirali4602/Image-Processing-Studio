@@ -2,7 +2,7 @@ from app.filters.filter_manager import FilterManager
 
 from app.filters.low_pass.box_filter import BoxFilter
 from app.filters.low_pass.gaussian_filter import GaussianFilter
-
+from app.filters.high_pass.sobel_filter import SobelFilter
 
 
 def register_filters(
@@ -15,4 +15,8 @@ def register_filters(
 
     manager.register(
         GaussianFilter()
+    )
+
+    manager.register(
+        SobelFilter()
     )
