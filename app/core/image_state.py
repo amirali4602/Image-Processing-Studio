@@ -6,8 +6,12 @@ import numpy as np
 
 @dataclass
 class ImageState:
+
     original_image: np.ndarray | None = None
+
     current_image: np.ndarray | None = None
+
+    preview_image: np.ndarray | None = None
 
     file_path: Path | None = None
 
@@ -35,8 +39,11 @@ class ImageState:
         return self.file_path.name
 
     def reset(self):
-        if self.original_image is None:
-            return None
 
-        self.current_image = self.original_image.copy()
-        return self.current_image
+        if self.original_image is not None:
+
+            self.current_image = (
+                self.original_image.copy()
+            )
+
+            self.preview_image = None

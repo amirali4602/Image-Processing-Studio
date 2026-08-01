@@ -62,9 +62,31 @@ class ImageController:
 
     def apply_filter(
         self,
-        filter_name: str,
-        params: dict
+        filter_name,
+        params
     ):
+
+        result = self.preview_filter(
+            filter_name,
+            params
+        )
+
+
+        self.state.current_image = result
+
+        return result
+
+    def preview_filter(
+        self,
+        filter_name,
+        params
+    ):
+
+        if self.state.original_image is None:
+            raise ValueError(
+                "No image loaded."
+            )
+
 
         image_filter = (
             self.filter_manager
@@ -78,6 +100,7 @@ class ImageController:
                 image_filter,
                 key
             ):
+
                 setattr(
                     image_filter,
                     key,
@@ -86,11 +109,11 @@ class ImageController:
 
 
         result = image_filter.apply(
-            self.state.current_image
+            self.state.original_image
         )
 
 
-        self.state.current_image = result
+        self.state.preview_image = result
 
 
         return result
