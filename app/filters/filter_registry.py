@@ -1,6 +1,7 @@
 from app.filters.filter_manager import FilterManager
 
 from app.filters.high_pass.laplacian_filter import LaplacianFilter
+from app.filters.histogram.histogram_matching import HistogramMatching
 from app.filters.intensity.log_transform import LogTransform
 from app.filters.intensity.piecewise_linear import PiecewiseLinearTransform
 from app.filters.low_pass.box_filter import BoxFilter
@@ -47,4 +48,8 @@ def register_filters(
 
     manager.register(
         HistogramEqualization()
+    )
+
+    manager.register(
+        HistogramMatching()
     )

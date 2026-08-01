@@ -44,16 +44,19 @@ class Sidebar(QWidget):
         self.filter_list = QListWidget()
 
         self.filter_list.addItems(
-            [
+           [
                 "Box Filter",
                 "Gaussian Filter",
                 "Sobel Filter",
                 "Laplacian Filter",
                 "LoG Filter",
+
                 "Log Transformation",
                 "Power Law (Gamma)",
                 "Piecewise Linear Transformation",
-                "Histogram Equalization"
+
+                "Histogram Equalization",
+                "Histogram Matching"
             ]
         )
 

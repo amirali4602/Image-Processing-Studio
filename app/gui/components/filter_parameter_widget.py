@@ -1,10 +1,12 @@
 from PySide6.QtWidgets import (
+    QPushButton,
     QWidget,
     QVBoxLayout,
     QLabel,
     QSpinBox,
     QDoubleSpinBox,
     QComboBox,
+    QFileDialog
 )
 
 from app.filters.filter_parameters import FilterParameter
@@ -15,6 +17,8 @@ class FilterParameterWidget(QWidget):
     def __init__(self):
 
         super().__init__()
+
+        self.selected_image = None
 
         self.layout = QVBoxLayout(self)
 
@@ -114,6 +118,16 @@ class FilterParameterWidget(QWidget):
                 parameter.options
             )
 
+        elif parameter.parameter_type == "image":
+
+            widget = QPushButton(
+                "Select Image"
+            )
+
+
+            widget.clicked.connect(
+                lambda: self._select_image(widget)
+            )
 
         else:
 
@@ -144,6 +158,11 @@ class FilterParameterWidget(QWidget):
 
         for name, widget in self.widgets.items():
 
+            if name == "reference_image":
+
+                result[name] = self.selected_image
+
+                continue
 
             if isinstance(
                 widget,
@@ -170,3 +189,24 @@ class FilterParameterWidget(QWidget):
 
 
         return result
+
+    def _select_image(
+        self,
+        button
+    ):
+
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Select Reference Image",
+            "",
+            "Images (*.png *.jpg *.jpeg *.bmp)"
+        )
+
+
+        if path:
+
+            self.selected_image = path
+
+            button.setText(
+                path.split("/")[-1]
+            )
