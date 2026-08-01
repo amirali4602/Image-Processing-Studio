@@ -3,12 +3,16 @@ from pathlib import Path
 from app.core.file_manager import FileManager
 from app.core.image_state import ImageState
 from app.filters.filter_manager import FilterManager
+from app.filters.filter_registry import register_filters
 
 class ImageController:
 
     def __init__(self):
         self.state = ImageState()
         self.filter_manager = FilterManager()
+        register_filters(
+            self.filter_manager
+        )
 
     def load_image(self, path: str | Path):
 
