@@ -1,32 +1,40 @@
 from PySide6.QtWidgets import (
-    QGroupBox,
-    QLabel,
-    QVBoxLayout,
-    QWidget,
+    QTreeWidget,
+    QTreeWidgetItem,
 )
 
 
-class Sidebar(QWidget):
+class Sidebar(QTreeWidget):
+
     def __init__(self):
         super().__init__()
 
-        layout = QVBoxLayout(self)
+        self.setHeaderHidden(True)
 
-        sections = [
-            "Low Pass",
-            "High Pass",
-            "Intensity",
-            "Histogram",
-        ]
+        self._build_tree()
 
-        for section in sections:
-            group = QGroupBox(section)
+    def _build_tree(self):
 
-            inner = QVBoxLayout()
-            inner.addWidget(QLabel("Coming in next sprints"))
+        low = QTreeWidgetItem(["Low Pass"])
+        low.addChild(QTreeWidgetItem(["Box Filter"]))
+        low.addChild(QTreeWidgetItem(["Gaussian Filter"]))
 
-            group.setLayout(inner)
+        high = QTreeWidgetItem(["High Pass"])
+        high.addChild(QTreeWidgetItem(["Sobel"]))
+        high.addChild(QTreeWidgetItem(["LoG"]))
 
-            layout.addWidget(group)
+        intensity = QTreeWidgetItem(["Intensity"])
+        intensity.addChild(QTreeWidgetItem(["Log"]))
+        intensity.addChild(QTreeWidgetItem(["Gamma"]))
+        intensity.addChild(QTreeWidgetItem(["Piecewise"]))
 
-        layout.addStretch()
+        histogram = QTreeWidgetItem(["Histogram"])
+        histogram.addChild(QTreeWidgetItem(["Equalization"]))
+        histogram.addChild(QTreeWidgetItem(["Matching"]))
+
+        self.addTopLevelItem(low)
+        self.addTopLevelItem(high)
+        self.addTopLevelItem(intensity)
+        self.addTopLevelItem(histogram)
+
+        self.expandAll()

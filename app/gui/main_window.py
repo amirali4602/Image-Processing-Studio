@@ -7,6 +7,7 @@ from PySide6.QtWidgets import (
     QLabel
 )
 from app.gui.components.image_view import ImageView
+from app.gui.components.properties_panel import PropertiesPanel
 from app.gui.components.sidebar import Sidebar
 from app.gui.components.toolbar import MainToolbar
 from PySide6.QtGui import QIcon
@@ -75,13 +76,17 @@ class MainWindow(QMainWindow):
 
         layout.setSpacing(10)
         self.sidebar = Sidebar()
-        self.sidebar.setFixedWidth(260)
+        self.sidebar.setFixedWidth(250)
 
         self.image_view = ImageView()
 
+        self.properties = PropertiesPanel()
+        self.properties.setFixedWidth(280)
+
         layout.addWidget(self.sidebar)
         layout.addWidget(self.image_view, 1)
-        
+        layout.addWidget(self.properties)
+
         self.sidebar.setFixedWidth(SIDEBAR_WIDTH)
 
     def show_about(self):
