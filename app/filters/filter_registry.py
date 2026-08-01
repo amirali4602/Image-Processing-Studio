@@ -2,6 +2,7 @@ from app.filters.filter_manager import FilterManager
 
 from app.filters.high_pass.laplacian_filter import LaplacianFilter
 from app.filters.intensity.log_transform import LogTransform
+from app.filters.intensity.piecewise_linear import PiecewiseLinearTransform
 from app.filters.low_pass.box_filter import BoxFilter
 from app.filters.low_pass.gaussian_filter import GaussianFilter
 from app.filters.high_pass.sobel_filter import SobelFilter
@@ -35,8 +36,11 @@ def register_filters(
     manager.register(
         LogTransform()
     )
-    
+
     manager.register(
         GammaTransform()
     )
-        
+
+    manager.register(
+        PiecewiseLinearTransform()
+    )

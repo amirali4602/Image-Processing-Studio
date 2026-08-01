@@ -51,7 +51,8 @@ class Sidebar(QWidget):
                 "Laplacian Filter",
                 "LoG Filter",
                 "Log Transformation",
-                "Power Law (Gamma)"
+                "Power Law (Gamma)",
+                "Piecewise Linear Transformation"
             ]
         )
 
