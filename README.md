@@ -5,6 +5,9 @@ A desktop image processing application built with Python, PySide6, OpenCV, and N
 The application provides a graphical interface for loading images, applying different image processing techniques, visualizing results, and analyzing image properties.
 
 ---
+## Demo Video
+
+![demo](app/resources/video/demo.gif)
 
 ## Features
 

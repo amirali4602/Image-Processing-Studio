@@ -35,6 +35,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(WINDOW_TITLE)
         self.resize(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.setMinimumSize(MIN_WIDTH, MIN_HEIGHT)
+        self.setWindowIcon(QIcon("app/resources/icons/Logo.jpg"))
 
     def _connect_actions(self):
 
