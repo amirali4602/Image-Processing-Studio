@@ -5,13 +5,15 @@ from PySide6.QtWidgets import (
     QGroupBox,
     QFormLayout,
 )
-
+from app.gui.components.histogram_widget import HistogramWidget
 
 class PropertiesPanel(QWidget):
 
     def __init__(self):
 
         super().__init__()
+
+        self.histogram = HistogramWidget()
 
         self._create_ui()
 
@@ -146,6 +148,27 @@ class PropertiesPanel(QWidget):
             statistics_group
         )
 
+        histogram_group = QGroupBox(
+            "Histogram"
+        )
+
+
+        histogram_layout = QVBoxLayout()
+
+
+        histogram_layout.addWidget(
+            self.histogram
+        )
+
+
+        histogram_group.setLayout(
+            histogram_layout
+        )
+
+
+        layout.addWidget(
+            histogram_group
+        )
 
     def update_image_info(
         self,
@@ -245,4 +268,14 @@ class PropertiesPanel(QWidget):
 
         self.std_label.setText(
             str(statistics.standard_deviation)
+        )
+
+
+    def update_histogram(
+        self,
+        image
+    ):
+
+        self.histogram.update_histogram(
+            image
         )

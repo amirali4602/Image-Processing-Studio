@@ -231,7 +231,7 @@ class MainWindow(QMainWindow):
 
         self.open_image_from_path(path)
         self.update_image_info()
-
+        
     def reset_image(self):
 
         image = self.image_controller.reset_image()
@@ -239,10 +239,27 @@ class MainWindow(QMainWindow):
         if image is None:
             return
 
-        self.image_view.set_image(image)
+
+        self.image_view.set_image(
+            image
+        )
+
+
         self.properties.update_image_info(
             self.image_controller.state
         )
+
+
+        self.properties.update_statistics(
+            image
+        )
+
+
+        self.properties.update_histogram(
+            image
+        )
+
+
         self.status_label.setText(
             "Image reset"
         )
@@ -263,7 +280,9 @@ class MainWindow(QMainWindow):
         self.properties.update_statistics(
             image
         )
-
+        self.properties.update_histogram(
+            image
+        )
         self.status_label.setText(
             f"Loaded {self.image_controller.state.file_name}"
         )
@@ -303,7 +322,9 @@ class MainWindow(QMainWindow):
             self.properties.update_statistics(
                 image
             )
-
+            self.properties.update_histogram(
+                image
+            )
             self.statusBar().showMessage(
                 f"Applied {name}"
             )
