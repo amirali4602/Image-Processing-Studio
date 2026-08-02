@@ -65,6 +65,11 @@ class ImageController:
     def reset_image(self):
 
         self.state.reset()
+        self.history.clear()
+
+        self.history.add(
+            "Original Image"
+        )
 
         return self.state.current_image
 
@@ -131,7 +136,7 @@ class ImageController:
 
 
         result = image_filter.apply(
-            self.state.original_image
+            self.state.current_image
         )
 
 
