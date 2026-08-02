@@ -4,6 +4,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QGroupBox,
     QFormLayout,
+    QListWidget
 )
 from app.gui.components.histogram_widget import HistogramWidget
 
@@ -14,7 +15,7 @@ class PropertiesPanel(QWidget):
         super().__init__()
 
         self.histogram = HistogramWidget()
-
+        self.history_list = QListWidget()
         self._create_ui()
 
 
@@ -170,6 +171,28 @@ class PropertiesPanel(QWidget):
             histogram_group
         )
 
+        history_group = QGroupBox(
+            "Processing History"
+        )
+
+
+        history_layout = QVBoxLayout()
+
+
+        history_layout.addWidget(
+            self.history_list
+        )
+
+
+        history_group.setLayout(
+            history_layout
+        )
+
+
+        layout.addWidget(
+            history_group
+        )
+
     def update_image_info(
         self,
         state
@@ -279,3 +302,17 @@ class PropertiesPanel(QWidget):
         self.histogram.update_histogram(
             image
         )
+
+    def update_history(
+        self,
+        history
+    ):
+
+        self.history_list.clear()
+
+
+        for item in history:
+
+            self.history_list.addItem(
+                item
+            )

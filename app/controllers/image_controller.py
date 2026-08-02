@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from app.core.file_manager import FileManager
+from app.core.history_manager import HistoryManager
 from app.core.image_state import ImageState
 from app.filters.filter_manager import FilterManager
 from app.filters.filter_registry import register_filters
@@ -9,6 +10,7 @@ class ImageController:
 
     def __init__(self):
         self.state = ImageState()
+        self.history = HistoryManager()
         self.filter_manager = FilterManager()
         register_filters(
             self.filter_manager
@@ -23,7 +25,11 @@ class ImageController:
         self.state.original_image = image.copy()
         self.state.current_image = image
         self.state.file_path = path
+        self.history.clear()
 
+        self.history.add(
+            "Original Image"
+        )
         return self.state.current_image
 
 
@@ -75,7 +81,21 @@ class ImageController:
 
 
         self.state.current_image = result
+        operation = filter_name
 
+
+        if params:
+
+            operation += " "
+
+            operation += str(
+                params
+            )
+
+
+        self.history.add(
+            operation
+        )
         return result
 
     def preview_filter(
